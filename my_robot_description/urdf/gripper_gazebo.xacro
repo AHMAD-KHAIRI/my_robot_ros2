@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <gazebo>
+        <plugin filename="gz-sim-joint-state-publisher-system"
+                name="gz::sim::systems::JointStatePublisher">
+            <joint_name>gripper_left_finger_joint</joint_name>
+            <joint_name>gripper_right_finger_joint</joint_name>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+        <plugin filename="gz-sim-joint-position-controller-system"
+                name="gz::sim::systems::JointPositionController">
+            <joint_name>gripper_left_finger_joint</joint_name>
+            <p_gain>50.0</p_gain>
+        </plugin>
+    </gazebo>
+
+    <gazebo>
+        <plugin filename="gz-sim-joint-position-controller-system"
+                name="gz::sim::systems::JointPositionController">
+            <joint_name>gripper_right_finger_joint</joint_name>
+            <p_gain>50.0</p_gain>
+        </plugin>
+    </gazebo>
+
+</robot>

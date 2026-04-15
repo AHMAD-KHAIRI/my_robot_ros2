@@ -1,0 +1,4 @@
+int64 led_number # led number starts from 0
+int64 state
+---
+bool success

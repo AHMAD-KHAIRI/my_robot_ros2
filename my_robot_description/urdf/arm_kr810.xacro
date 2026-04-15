@@ -1,0 +1,334 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <ruid>0</ruid>
+
+  <!-- links -->
+  <link name="arm_base_link">
+    <visual>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Base.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <!-- <origin rpy="0 0 ${-(pi / 2.0)}" xyz="0 0 0"/> -->
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </collision>
+    <xacro:box_inertia m="0.6" x="0.3" y="0.3" z="0.05" o_xyz="0 0 0" o_rpy="0 0 0" />
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0.6"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="link1"> 
+    <visual>
+      <origin rpy="0 0 0" xyz="0.05 0 0.273"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link2.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.05 0 0.273"/>
+    </collision>
+    <xacro:box_inertia m="4.58" x="0.1" y="0.05" z="0.2737" o_xyz="0 0 0.1368" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.13684999999999997"/>
+      <mass value="4.58"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="linkJ2">
+    <visual>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 -0.01 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.015"/>
+      </geometry>
+      <material name="orange" />
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 -0.01 0"/>
+      <geometry>
+        <cylinder length="0.15" radius="0.015"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertia m="6.1" r="0.015" l="0.15" o_xyz="0 0 0" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="6.1"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="link2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.05 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <!-- <mesh filename="package://my_robot_description/meshes/v1_kr810_link3_collision_geometry.stl" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://my_robot_description/meshes/a810_Link3.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.05 0 0"/>
+    </collision>
+    <xacro:box_inertia m="0.43" x="0.1" y="0.05" z="0.15" o_xyz="0 0 0.075" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.17500000000000002"/>
+      <mass value="0.43"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="link3">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.04 0.0 0.13793"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <!-- <mesh filename="package://my_robot_description/meshes/v1_kr810_link4_collision_geometry.stl" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://my_robot_description/meshes/a810_Link4.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.04 0.0 0.13793"/>
+    </collision>
+    <xacro:box_inertia m="2.9" x="0.08" y="0.04" z="0.13793" o_xyz="0 0 0.068965" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="2.9"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="linkJ4">
+    <visual>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.013000000000000001 0"/>
+      <geometry>
+        <cylinder length="0.129" radius="0.015"/>
+      </geometry>
+      <material name="orange" />
+    </visual>
+    <collision>
+      <origin rpy="1.5707963267948966 0 0" xyz="0 0.013000000000000001 0"/>
+      <geometry>
+        <cylinder length="0.129" radius="0.015"/>
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertia m="6.1" r="0.015" l="0.15" o_xyz="0 0 0" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0.006500000000000001 0"/>
+      <mass value="3.8"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="link4">
+    <visual>
+      <origin rpy="0 0 0" xyz="0.04 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <!-- <mesh filename="package://my_robot_description/meshes/v1_kr810_link3_collision_geometry.stl" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://my_robot_description/meshes/a810_Link5.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <!-- <origin rpy="0 0 0" xyz="0.04 0.015 0.0"/> -->
+      <origin rpy="0 0 0" xyz="0.04 0 0"/>
+    </collision>
+    <xacro:box_inertia m="0.33" x="0.08" y="0.04" z="0.168" o_xyz="0 0 0.084" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.168"/>
+      <mass value="0.33"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="link5">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0.002 0.1005"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <!-- <mesh filename="package://my_robot_description/meshes/kr810_link6_collision_geometry.stl" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://my_robot_description/meshes/a810_Link6.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0.002 0.1005"/>
+    </collision>
+    <xacro:box_inertia m="1.7" x="0.04" y="0.04" z="0.1005" o_xyz="0 0 0.05025" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="1.7"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="linkJ6">
+    <xacro:cylinder_inertia m="6.1" r="0.015" l="0.15" o_xyz="0 0 0" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0.004 0"/>
+      <mass value="1.8"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="link6">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.002"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_Link7.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="dark_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <!-- <mesh filename="package://my_robot_description/meshes/v1_kr810_link7_collision_geometry.stl" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://my_robot_description/meshes/a810_Link7.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.002"/>
+    </collision>
+    <xacro:box_inertia m="1.7" x="0.04" y="0.04" z="0.1005" o_xyz="0 0 0.05025" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0.004"/>
+      <mass value="1.8"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+  
+  <link name="end_effector_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 -0.1051"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/a810_ToolIO.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="light_grey" />
+    </visual>
+    <collision>
+      <geometry>
+        <!-- <mesh filename="package://my_robot_description/meshes/kr810_toolIO_collision_geometry.stl" scale="0.001 0.001 0.001"/> -->
+        <mesh filename="package://my_robot_description/meshes/a810_ToolIO.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <!-- <origin rpy="0 0 0" xyz="0.0 -0.0 -0.1001"/> -->
+      <origin rpy="0 0 0" xyz="0 0 -0.1051"/>
+    </collision>
+    <xacro:box_inertia m="1.7" x="0.04" y="0.04" z="0.1005" o_xyz="0 0 0.05025" o_rpy="0 0 0"/>
+    <!-- <inertial>
+      <origin rpy="0 0 0" xyz="0 0 -0.0197"/>
+      <mass value="0.56"/>
+      <inertia ixx="0.003" ixy="0.0" ixz="0.0" iyy="0.003" iyz="0.0" izz="0.003"/>
+    </inertial> -->
+  </link>
+
+  <link name="tool_link" />
+
+  <!-- joints -->
+  <joint name="arm_joint1" type="continuous">
+    <parent link="arm_base_link"/>
+    <child link="link1"/>
+    <origin rpy="0 0 0" xyz="0 0 0.035"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.1"/>
+    <limit effort="204" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="arm_joint2" type="continuous">
+    <parent link="link1"/>
+    <child link="linkJ2"/>
+    <origin rpy="0 0 0" xyz="0.05 0 0.27369999999999994"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.1"/>
+    <limit effort="204" lower="-1.2217304763960306" upper="3.141592653589793" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="arm_jointPL3" type="fixed">
+    <parent link="linkJ2"/>
+    <child link="link2"/>
+    <origin rpy="0 0 0" xyz="-0.05 -0.0857 0"/>
+  </joint>
+
+  <joint name="arm_joint3" type="continuous">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin rpy="0 0 0" xyz="0 0 0.2796"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.1"/>
+    <limit effort="85" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="arm_joint4" type="continuous">
+    <parent link="link3"/>
+    <child link="linkJ4"/>
+    <origin rpy="0 0 0" xyz="0.04 0 0.1373"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.1"/>
+    <limit effort="85" lower="-1.2217304763960306" upper="3.141592653589793" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="arm_jointPL5" type="fixed">
+    <parent link="linkJ4"/>
+    <child link="link4"/>
+    <origin rpy="0 0 0" xyz="-0.04 0.08405 0"/>
+  </joint>
+
+  <joint name="arm_joint5" type="continuous">
+    <parent link="link4"/>
+    <child link="link5"/>
+    <origin rpy="0 0 0" xyz="0 0 0.274"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.1"/>
+    <limit effort="51" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="arm_joint6" type="continuous">
+    <parent link="link5"/>
+    <child link="linkJ6"/>
+    <origin rpy="0 0 0" xyz="0 0 0.1005"/>
+    <axis xyz="0 1 0"/>
+    <dynamics damping="0.1"/>
+    <limit effort="51" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="arm_jointPL7" type="fixed">
+    <parent link="linkJ6"/>
+    <child link="link6"/>
+    <origin rpy="0 0 0" xyz="0 0.111 0"/>
+  </joint>
+  
+  <joint name="arm_joint7" type="continuous">
+    <parent link="link6"/>
+    <child link="end_effector_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0.108"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="0.1"/>
+    <limit effort="51" lower="-6.283185307179586" upper="6.283185307179586" velocity="3.9269908169872414"/>
+  </joint>
+
+  <joint name="end_effector_tool_joint" type="fixed">
+    <parent link="end_effector_link" />
+    <child link="tool_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+</robot>
