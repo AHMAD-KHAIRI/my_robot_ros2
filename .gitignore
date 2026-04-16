@@ -1,3 +1,15 @@
+# Keep repo clean
+examples/
+kr_*
+my_cpp_pkg/
+my_py_pkg/
+my_package/
+rg6_gripper_description/
+turtlesim_catch_them_all/
+v1_*
+v2_*
+v3_*
+
 # ROS2 / colcon
 build/
 install/
