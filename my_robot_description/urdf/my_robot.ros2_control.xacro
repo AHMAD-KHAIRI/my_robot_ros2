@@ -66,6 +66,26 @@
       <state_interface name="velocity"/>
     </joint>
 
+    <joint name="right_finger_outer_joint">
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="left_finger_tip_joint">
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="right_finger_tip_joint">
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="left_finger_inner_joint">
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="right_finger_inner_joint">
+      <state_interface name="position"/>
+    </joint>
+
   </ros2_control>
 
 </robot>
