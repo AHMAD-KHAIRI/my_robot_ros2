@@ -1,0 +1,10 @@
+string instruction
+sensor_msgs/Image rgb_image
+sensor_msgs/Image depth_image
+string[] candidate_object_ids
+---
+bool success
+geometry_msgs/PoseStamped pick_pose
+geometry_msgs/PoseStamped place_pose
+string selected_object_id
+string debug_info
