@@ -7,6 +7,8 @@ from sensor_msgs.msg import Image, JointState
 from moveit.planning import MoveItPy
 from moveit.planning import PlanningComponent
 from moveit_configs_utils import MoveItConfigsBuilder
+from rclpy.action import ActionClient
+from control_msgs.action import FollowJointTrajectory
 
 ROBOT_CONFIG = MoveItConfigsBuilder(robot_name="my_robot", package_name="my_robot_moveit_config")\
                                     .robot_description_semantic("config/my_robot.srdf", {"name": "my_robot"})\
@@ -60,6 +62,17 @@ class MyRobotTaskClientNode(Node):
         self.qos_.reliability = ReliabilityPolicy.BEST_EFFORT
         self.joint_state_sub_ = self.create_subscription(JointState, "/joint_states", self.callback_joint_state, self.qos_)
         self.startup_timer_ = self.create_timer(0.5, self.callback_startup_check)
+        self.arm_action_client = ActionClient(self, FollowJointTrajectory, "/arm_controller/follow_joint_trajectory")
+        self.place_pose_ = None
+        self.phase_ = None
+
+    def wait_for_arm_action_server(self):
+        if not self.arm_action_client.wait_for_server(timeout_sec=5.0):
+            self.get_logger().error("Arm FollowJointTrajectory action server not available.")
+            return False
+
+        self.get_logger().info("Arm FollowJointTrajectory action server is available.")
+        return True
 
     def callback_joint_state(self, msg: JointState):
         if len(msg.name) > 0 and len(msg.position) > 0:
@@ -93,36 +106,120 @@ class MyRobotTaskClientNode(Node):
         future = self.set_pick_place_task_client_.call_async(request)
         future.add_done_callback(self.callback_call_pick_place_task)
 
+    def goal_result_callback(self, future):
+        result = future.result().result
+        self.get_logger().info(f"Arm trajectory result error_code: {result.error_code}")
+        self.get_logger().info(f"Arm trajectory result error_string: {result.error_string}")
+
+        if result.error_code != 0:
+            return
+
+        if self.phase_ == "pick":
+            self.get_logger().info("Pick done → starting place")
+
+            self.phase_ = "place"
+
+            self.get_logger().info(f"Place pose frame: {self.place_pose_.header.frame_id}")
+            self.get_logger().info(
+                f"Place pose position: "
+                f"x={self.place_pose_.pose.position.x}, "
+                f"y={self.place_pose_.pose.position.y}, "
+                f"z={self.place_pose_.pose.position.z}"
+            )
+            self.get_logger().info(
+                f"Place pose orientation: "
+                f"x={self.place_pose_.pose.orientation.x}, "
+                f"y={self.place_pose_.pose.orientation.y}, "
+                f"z={self.place_pose_.pose.orientation.z}, "
+                f"w={self.place_pose_.pose.orientation.w}"
+            )
+
+            self.arm_.set_start_state_to_current_state()
+            self.arm_.set_goal_state(
+                pose_stamped_msg=self.place_pose_,
+                pose_link="tool_link"
+            )
+            self.plan_and_execute(self.arm_)
+
+        elif self.phase_ == "place":
+            self.get_logger().info("Place done → FULL LOOP COMPLETE")
+
+    def goal_response_callback(self, future):
+        goal_handle = future.result()
+
+        if not goal_handle.accepted:
+            self.get_logger().error("Arm trajectory goal was rejected.")
+            return
+
+        self.get_logger().info("Arm trajectory goal accepted.")
+
+        result_future = goal_handle.get_result_async()
+        result_future.add_done_callback(self.goal_result_callback)
+
     def plan_and_execute(self, interface):
         plan_result = interface.plan()
 
         if not plan_result:
-            self.get_logger().info("Pick plan failed.")
+            self.get_logger().info(f"{self.phase_.upper()} plan failed.")
             return
 
-        self.get_logger().info("Pick plan succeeded.")
-        self.get_logger().info("Attempting pick execution...")
+        self.get_logger().info(f"{self.phase_.upper()} plan succeeded.")
+        if not self.wait_for_arm_action_server():
+            return
+        
+        traj_msg = plan_result.trajectory.get_robot_trajectory_msg()
+        self.get_logger().info(f"Converted joint names: {traj_msg.joint_trajectory.joint_names}")
 
-        exec_result = self.robot_.execute(plan_result.trajectory, controllers=[])
+        self.get_logger().info(f"Trajectory points: {len(traj_msg.joint_trajectory.points)}")
 
-        if exec_result:
-            self.get_logger().info("Pick execution succeeded.")
-        else:
-            self.get_logger().info("Pick execution FAILED.")
+        if len(traj_msg.joint_trajectory.points) > 0:
+            first_point = traj_msg.joint_trajectory.points[0]
+            last_point = traj_msg.joint_trajectory.points[-1]
+            self.get_logger().info(
+                f"First point time_from_start: {first_point.time_from_start.sec}.{first_point.time_from_start.nanosec}"
+            )
+            self.get_logger().info(
+                f"Last point time_from_start: {last_point.time_from_start.sec}.{last_point.time_from_start.nanosec}"
+            )
+
+        goal_msg = FollowJointTrajectory.Goal()
+        goal_msg.trajectory = traj_msg.joint_trajectory
+
+        self.get_logger().info(f"Built FollowJointTrajectory goal with {len(goal_msg.trajectory.points)} points.")
+        self.get_logger().info(f"Goal joint names: {goal_msg.trajectory.joint_names}")
+        
+        self.get_logger().info("Sending goal to /arm_controller/follow_joint_trajectory ...")
+        send_goal_future = self.arm_action_client.send_goal_async(goal_msg)
+        send_goal_future.add_done_callback(self.goal_response_callback)
+        return
 
     def callback_call_pick_place_task(self, future):
         response: PickPlaceTask.Response = future.result()
 
         if response.success:
             self.get_logger().info("Service call successful.")
+            
+            self.place_pose_ = response.place_pose
+            self.phase_ = "pick"
+
+            self.get_logger().info(f"Pick pose frame: {response.pick_pose.header.frame_id}")
+            self.get_logger().info(
+                f"Pick pose position: "
+                f"x={response.pick_pose.pose.position.x}, "
+                f"y={response.pick_pose.pose.position.y}, "
+                f"z={response.pick_pose.pose.position.z}"
+            )
+            self.get_logger().info(
+                f"Pick pose orientation: "
+                f"x={response.pick_pose.pose.orientation.x}, "
+                f"y={response.pick_pose.pose.orientation.y}, "
+                f"z={response.pick_pose.pose.orientation.z}, "
+                f"w={response.pick_pose.pose.orientation.w}"
+            )
             self.arm_.set_start_state_to_current_state()
             self.arm_.set_goal_state(pose_stamped_msg=response.pick_pose, pose_link="tool_link")
             self.plan_and_execute(self.arm_)
-            # self.get_logger().info(f"""Service call successful!\n
-            #                        Selected object: {response.selected_object_id}\n
-            #                        Pick pose: {response.pick_pose}\n
-            #                        Place pose: {response.place_pose}\n
-            #                        Debug info: {response.debug_info}""")
+
         else:
             self.get_logger().info("Service call failed!")
 

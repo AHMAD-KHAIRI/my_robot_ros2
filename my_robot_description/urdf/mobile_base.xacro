@@ -6,7 +6,7 @@
     <xacro:property name="base_height" value="0.2" />
     <xacro:property name="wheel_radius" value="0.1" />
     <xacro:property name="wheel_length" value="0.05" />
-    
+
     <link name="base_footprint" />
 
     <link name="base_link">
@@ -23,7 +23,7 @@
             </geometry>
             <origin xyz="0 0 ${base_height / 2.0}" rpy="0 0 0" />
         </collision>
-        <xacro:box_inertia m="50.0" x="${base_length}" y="${base_width}" z="${base_height}" 
+        <xacro:box_inertia m="200.0" x="${base_length}" y="${base_width}" z="${base_height}" 
                            o_xyz="0 0 ${base_height / 2.0}" o_rpy="0 0 0" />
     </link>
 

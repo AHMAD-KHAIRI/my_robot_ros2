@@ -27,12 +27,12 @@ class MyRobotTaskServerNode(Node):
     def callback_pick_place_task(self, request: PickPlaceTask.Request, response: PickPlaceTask.Response):
         self.get_logger().info(f"Received task: {request.instruction}")
         response.pick_pose = self.go_to_pose_target(frame_id="arm_base_link",
-                                                    x= 0.5, y= 0.0, z= 0.2,
-                                                    qx= 0.0, qy= 0.0, qz= 0.0, qw= 1.0)
+                                                    x= 0.5, y= 0.0, z= 0.35,
+                                                    qx= 1.0, qy= 0.0, qz= 0.0, qw= 0.0)
         
         response.place_pose = self.go_to_pose_target(frame_id="arm_base_link",
-                                                     x= 0.4, y= 0.2, z= 0.2,
-                                                     qx= 0.0, qy= 0.0, qz= 0.0, qw= 1.0)
+                                                     x= 0.4, y= 0.2, z= 0.35,
+                                                     qx= 1.0, qy= 0.0, qz= 0.0, qw= 0.0)
         response.success = True
         response.selected_object_id = "dummy_object"
         response.debug_info = "fallback_hardcoded"
